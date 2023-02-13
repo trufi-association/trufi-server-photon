@@ -6,8 +6,8 @@ services:
     volumes:
     - ./photon_data:/app/photon_data
     restart: unless-stopped
-    ports:
-      - 2322:2322
+    # ports:
+    #   - 2322:2322
     # command: tail -F anything
    
    
