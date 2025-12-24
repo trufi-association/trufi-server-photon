@@ -1,16 +1,21 @@
-version: '3'
 services:
   photon:
+    container_name: photon
     build:
       context: .
     volumes:
-    - ./photon_data:/app/photon_data
+      - ./photon_data:/app/photon_data
     restart: unless-stopped
+    mem_limit: 2g
     # ports:
     #   - 2322:2322
-    # command: tail -F anything
-   
-   
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:2322/api?q=test"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
 networks:
   default:
     name: trufi-server
