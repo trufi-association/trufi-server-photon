@@ -1,0 +1,6 @@
+{
+  "name": "photon",
+  "description": "Photon geocoding server for address search and reverse geocoding",
+  "container": "photon",
+  "port": 2322
+}
