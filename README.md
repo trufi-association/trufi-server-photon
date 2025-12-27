@@ -87,32 +87,51 @@ services:
       - trufi-server
 ```
 
-### 2. Configure nginx
+### 2. Configure trufi-server
 
-Add a server block to expose Photon on your domain. Example for `photon.example.com`:
+Add Photon to your `data/config/appsettings.json`:
 
-```nginx
-server {
-    listen 80;
-    server_name photon.example.com;
-
-    location / {
-        proxy_pass http://photon:2322;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+```json
+{
+  "LettuceEncrypt": {
+    "DomainNames": ["yourdomain.com", "photon.yourdomain.com"],
+    "EmailAddress": "admin@yourdomain.com"
+  },
+  "ReverseProxy": {
+    "Routes": {
+      "photon": {
+        "ClusterId": "photon",
+        "Match": {
+          "Hosts": ["photon.yourdomain.com"]
+        }
+      }
+    },
+    "Clusters": {
+      "photon": {
+        "Destinations": {
+          "photon": {
+            "Address": "http://photon:2322"
+          }
+        }
+      }
     }
+  }
 }
 ```
 
-### 3. Test the integration
+### 3. Apply changes
 
 ```bash
-curl 'https://photon.example.com/api?q=test'
+docker compose restart server
 ```
 
-> SSL is handled automatically by [trufi-server](https://github.com/trufi-association/trufi-server).
+### 4. Test the integration
+
+```bash
+curl 'https://photon.yourdomain.com/api?q=test'
+```
+
+> SSL certificates are obtained automatically by [trufi-server](https://github.com/trufi-association/trufi-server) using LettuceEncrypt.
 
 ## Project Structure
 
