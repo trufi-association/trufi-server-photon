@@ -2,5 +2,6 @@
   "name": "photon",
   "description": "Photon geocoding server for address search and reverse geocoding",
   "container": "photon",
-  "port": 2322
+  "port": 2322,
+  "analytics": true
 }
